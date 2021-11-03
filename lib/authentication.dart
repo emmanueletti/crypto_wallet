@@ -8,21 +8,74 @@ class Authentication extends StatefulWidget {
 }
 
 class _AuthenticationState extends State<Authentication> {
+  // Using a controller to capture the user text which allows us not to have to
+  // make refactor this widget to stateful widget.
+  // Other option is to use state controlled input pattern like in React.
+  TextEditingController _emailField = TextEditingController();
+  TextEditingController _passwordField = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.blueAccent,
         ),
         child: Column(
           children: [
-            TextFormField(),
-            TextFormField(),
-            Container(),
-            Container(),
+            TextFormField(
+              controller: _emailField,
+              decoration: const InputDecoration(
+                hintText: 'something@email.com',
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
+                labelText: 'Email',
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            TextFormField(
+              controller: _passwordField,
+              obscureText: true,
+              decoration: const InputDecoration(
+                hintText: 'password',
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
+                labelText: 'Password',
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width / 1.4,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.white,
+              ),
+              child: MaterialButton(
+                onPressed: () {},
+                child: const Text('Register'),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width / 1.4,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.white,
+              ),
+              child: MaterialButton(
+                onPressed: () {},
+                child: const Text('Login'),
+              ),
+            ),
           ],
         ),
       ),
