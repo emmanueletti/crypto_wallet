@@ -10,7 +10,7 @@ Future<double> getPrice(String id) async {
     // Darts version of JSON.parse
     var data = jsonDecode(response.body);
     var currentPriceInUSD =
-        data['market_date']['current_price']['usd'].toString();
+        (data as Map)['market_data']['current_price']['usd'].toString();
     return double.parse(currentPriceInUSD);
   } catch (e) {
     print(e.toString());

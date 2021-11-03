@@ -68,3 +68,15 @@ Future<bool> addCoin(String id, String amount) async {
     return false;
   }
 }
+
+Future<bool> removeCoin(String id) async {
+  // get current uid of user
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+  await FirebaseFirestore.instance
+      .collection('Users')
+      .doc(uid)
+      .collection('Coins')
+      .doc(id)
+      .delete();
+  return true;
+}

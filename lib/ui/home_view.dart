@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto_wallet/net/flutterfire.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    double getValue(String id, double amount) {
+    double getValue(String id, num amount) {
       // would be good to use enums here to manage constant values
       if (id == 'bitcoin') {
         return amount * bitcoinCurrentPriceInUSD;
@@ -56,7 +57,7 @@ class _HomeViewState extends State<HomeView> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         // research what a StreamBuild is
@@ -75,17 +76,46 @@ class _HomeViewState extends State<HomeView> {
                 child: CircularProgressIndicator(),
               );
             }
-
             return ListView(
               children: snapshot.data!.docs.map((document) {
-                return Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text('Coin Name: ${document.id}'),
-                      Text(
-                          'Amount Owned: ${getValue(document.id, (document.data() as Map)['amount']).toStringAsFixed(2)}'),
-                    ],
+                return Padding(
+                  padding: const EdgeInsets.only(top: 5.0, left: 15, right: 15),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    height: MediaQuery.of(context).size.height / 12,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.blue,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(width: 5),
+                        Text(
+                          'Coin Name: ${document.id}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          '\$${getValue(document.id, (document.data() as Map)['amount']).toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await removeCoin(document.id);
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
